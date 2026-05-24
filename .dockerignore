@@ -1,0 +1,15 @@
+.git
+.venv
+data/
+.env
+__pycache__
+*.pyc
+tests/
+docs/
+.pytest_cache
+.worktrees
+.claude
+.superpowers
+node_modules
+bruno/
+README.md

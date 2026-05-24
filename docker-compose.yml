@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  web:
+    image: sghiassy/keyvision
+    networks:
+      - myapp_caddy_network
+    volumes:
+      - keyvision_data:/app/data
+      - huggingface_cache:/root/.cache/huggingface
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
+networks:
+  myapp_caddy_network:
+    external: true
+
+volumes:
+  keyvision_data:
+  huggingface_cache:

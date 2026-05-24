@@ -19,7 +19,17 @@
     "test": "tests"
   },
   "scripts": {
-    "start": "uvicorn app.main:app --reload",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "uvicorn app.main:app --reload",
+    "docker:local:build": "docker build -t sghiassy/keyvision:local .",
+    "docker:local:run": "docker run -p 8000:6000 -v $(pwd)/data:/app/data -v ~/.cache/huggingface:/root/.cache/huggingface sghiassy/keyvision:local",
+    "docker:local:stop": "docker ps -q --filter ancestor=sghiassy/keyvision:local | xargs docker stop",
+    "start": "npm run docker:local:run",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:context:default": "docker context use default",
+    "docker:context:hostinger": "docker context use hostinger",
+    "docker:build:image": "npm run docker:context:default && docker build --platform linux/amd64 -t sghiassy/keyvision .",
+    "docker:push": "docker push sghiassy/keyvision:latest",
+    "docker:deploy": "npm run docker:context:hostinger && docker stack deploy -c docker-compose.yml keyvision",
+    "caddy:reload": "docker context use hostinger && docker service update --force myapp_caddy"
   }
 }
