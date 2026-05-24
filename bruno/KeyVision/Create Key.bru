@@ -1,0 +1,19 @@
+meta {
+  name: Create Key
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8000/keys
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {"label": "House Key", "notes": "425 Fifth Ave"}
+}

@@ -1,5 +1,9 @@
 # Gist at: https://gist.github.com/sghiassy/e14593a439a03028b98a
 
+##### Claude
+.claude
+.superpowers
+
 ##### Python
 .venv
 .env
@@ -78,3 +82,13 @@ ios/Example/Pods/Natrium/bin/natrium.lock
 
 ### Webpack
 .webpack
+
+### Worktrees
+.worktrees/
+
+### Python project
+data/images/
+data/keyvision.db
+__pycache__/
+*.pyc
+.pytest_cache/

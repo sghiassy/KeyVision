@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KeyVision Admin</title>
+  <style>
+    :root {
+      --color-bg:        #f5f5f5;
+      --color-surface:   #ffffff;
+      --color-border:    #e0e0e0;
+      --color-primary:   #2563eb;
+      --color-primary-h: #1d4ed8;
+      --color-danger:    #dc2626;
+      --color-success:   #16a34a;
+      --color-text:      #111827;
+      --color-muted:     #6b7280;
+      --radius:          8px;
+      --shadow:          0 1px 3px rgba(0,0,0,.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                   Helvetica, Arial, sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+    }
+
+    /* ── Shell ── */
+    header {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+    }
+    header h1 { font-size: 1.125rem; font-weight: 700; letter-spacing: -.3px; }
+    header span { color: var(--color-primary); }
+    main { max-width: 1000px; margin: 0 auto; padding: 32px 24px; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: var(--radius);
+      font-size: .875rem; font-weight: 500; cursor: pointer;
+      border: 1px solid transparent; transition: background .15s, color .15s;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+    .btn-primary:hover { background: var(--color-primary-h); border-color: var(--color-primary-h); }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-ghost { background: transparent; color: var(--color-text); border-color: var(--color-border); }
+    .btn-ghost:hover { background: var(--color-bg); }
+    .btn-danger { background: transparent; color: var(--color-danger); border-color: var(--color-danger); }
+    .btn-danger:hover { background: var(--color-danger); color: #fff; }
+
+    /* ── Page headers ── */
+    .page-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 24px; gap: 16px;
+    }
+    .page-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+    .page-subtitle { color: var(--color-muted); font-size: .875rem; }
+
+    /* ── Table ── */
+    .table-wrap {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    thead th {
+      background: #f9fafb; text-align: left;
+      padding: 10px 16px; font-weight: 600;
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-muted); font-size: .8rem;
+      text-transform: uppercase; letter-spacing: .04em;
+    }
+    tbody tr { border-bottom: 1px solid var(--color-border); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f9fafb; }
+    tbody td { padding: 12px 16px; vertical-align: middle; }
+    .badge {
+      display: inline-block; background: #eff6ff; color: var(--color-primary);
+      border-radius: 99px; padding: 2px 10px; font-size: .78rem; font-weight: 600;
+    }
+    .notes-cell {
+      color: var(--color-muted); max-width: 220px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .empty-state { text-align: center; padding: 60px 24px; color: var(--color-muted); }
+    .empty-state p { font-size: 1rem; margin-top: 8px; }
+
+    /* ── Key detail ── */
+    .detail-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 28px; gap: 16px; flex-wrap: wrap;
+    }
+    .detail-meta h2 { font-size: 1.5rem; font-weight: 700; }
+    .detail-meta .notes { color: var(--color-muted); font-size: .9rem; margin-top: 4px; }
+    .detail-meta .created { color: var(--color-muted); font-size: .8rem; margin-top: 6px; }
+    .detail-actions { display: flex; gap: 8px; }
+
+    .grid-section h3 { font-size: 1rem; font-weight: 600; margin-bottom: 16px; }
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    .image-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
+    .image-card img {
+      width: 100%; aspect-ratio: 1 / 1; object-fit: cover;
+      background: #f3f4f6; display: block;
+      transition: opacity .15s;
+    }
+    .image-card:hover img { opacity: .85; }
+    .image-card-footer { padding: 6px 8px; font-size: .72rem; color: var(--color-muted); }
+    .no-images { color: var(--color-muted); font-size: .9rem; padding: 32px 0; }
+
+    /* ── Image detail ── */
+    .image-detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 680px) { .image-detail-layout { grid-template-columns: 1fr; } }
+    .image-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 680px) { .image-panels { grid-template-columns: 1fr; } }
+    .image-panels .image-detail-photo { aspect-ratio: 1 / 1; }
+    .image-panels .image-detail-photo img { object-fit: contain; height: 100%; }
+    .image-panel-label {
+      font-size: .75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--color-muted); margin-bottom: 6px;
+    }
+    .image-detail-photo {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .image-detail-photo img { width: 100%; display: block; object-fit: contain; background: #f3f4f6; }
+    .image-detail-sidebar { display: flex; flex-direction: column; gap: 16px; }
+    .info-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .info-card h3 {
+      font-size: .8rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--color-muted); margin-bottom: 12px;
+    }
+    .info-row {
+      display: flex; flex-direction: column; gap: 2px;
+      padding: 8px 0; border-bottom: 1px solid var(--color-border);
+    }
+    .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .info-row:first-of-type { padding-top: 0; }
+    .info-label { font-size: .75rem; color: var(--color-muted); font-weight: 500; }
+    .info-value { font-size: .875rem; color: var(--color-text); word-break: break-all; }
+
+    /* ── Create form ── */
+    .form-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      max-width: 640px;
+    }
+    .form-group { margin-bottom: 22px; }
+    .form-label {
+      display: block; font-size: .875rem; font-weight: 500; margin-bottom: 6px;
+    }
+    .form-label .req { color: var(--color-danger); margin-left: 2px; }
+    .form-input, .form-textarea {
+      width: 100%; padding: 8px 12px;
+      border: 1px solid var(--color-border); border-radius: var(--radius);
+      font-size: .9rem; font-family: inherit; color: var(--color-text);
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .form-input:focus, .form-textarea:focus {
+      outline: none; border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+    }
+    .form-textarea { resize: vertical; min-height: 80px; }
+
+    /* file picker */
+    .file-add-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: var(--radius);
+      font-size: .875rem; font-weight: 500; cursor: pointer;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg); color: var(--color-text);
+      transition: background .15s;
+    }
+    .file-add-btn:hover { background: var(--color-border); }
+
+    /* preview grid */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .preview-item {
+      position: relative;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #f3f4f6;
+    }
+    .preview-item img {
+      width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block;
+    }
+    .preview-remove {
+      position: absolute; top: 4px; right: 4px;
+      width: 20px; height: 20px;
+      background: rgba(0,0,0,.55); color: #fff;
+      border: none; border-radius: 50%;
+      font-size: .8rem; line-height: 1; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0;
+    }
+    .preview-remove:hover { background: rgba(0,0,0,.8); }
+    .preview-name {
+      padding: 4px 6px; font-size: .68rem; color: var(--color-muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* upload progress */
+    .upload-status { margin-bottom: 20px; }
+    .upload-result {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 0; border-bottom: 1px solid var(--color-border);
+      font-size: .875rem;
+    }
+    .upload-result:last-of-type { border-bottom: none; }
+    .upload-result .icon { font-size: 1rem; flex-shrink: 0; }
+    .upload-result.ok .icon { color: var(--color-success); }
+    .upload-result.fail .icon { color: var(--color-danger); }
+    .upload-result .fname { font-weight: 500; }
+    .upload-result .reason { color: var(--color-muted); font-size: .8rem; }
+    .upload-summary { margin-top: 12px; color: var(--color-muted); font-size: .875rem; }
+
+    /* ── Similarity bar ── */
+    .sim-bar-wrap {
+      width: 160px; height: 10px;
+      background: #e5e7eb; border-radius: 99px;
+      position: relative; display: inline-block; vertical-align: middle;
+    }
+    .sim-bar {
+      height: 100%; border-radius: 99px;
+      background: var(--color-success);
+      transition: width .2s;
+    }
+    .sim-bar.amber { background: #d97706; }
+    .sim-bar.red   { background: var(--color-danger); }
+    .sim-threshold {
+      position: absolute; top: -2px; bottom: -2px;
+      width: 2px; background: rgba(0,0,0,.35); border-radius: 1px;
+    }
+
+    /* ── Debug panel ── */
+    .debug-section { margin-top: 32px; }
+    .debug-section h3 {
+      font-size: .8rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--color-muted); margin-bottom: 12px;
+    }
+    .match-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 0; border-bottom: 1px solid var(--color-border);
+      flex-wrap: wrap;
+    }
+    .match-row:last-child { border-bottom: none; }
+    .match-label { min-width: 120px; font-weight: 500; font-size: .875rem; }
+    .match-score { font-size: .875rem; min-width: 44px; text-align: right; }
+    .match-conf  { font-size: .75rem; font-weight: 600; min-width: 60px; }
+    .expand-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: .8rem; color: var(--color-primary); padding: 0 4px;
+      flex-shrink: 0;
+    }
+    .per-image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 8px; padding: 12px 0 4px;
+      width: 100%;
+    }
+    .per-image-item {
+      border: 1px solid var(--color-border); border-radius: var(--radius);
+      overflow: hidden; background: #f9fafb; text-align: center;
+    }
+    .per-image-item img {
+      width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block;
+    }
+    .per-image-score {
+      font-size: .7rem; padding: 3px 4px; color: var(--color-muted);
+    }
+
+    /* ── Recognize ── */
+    .recognize-images {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 680px) { .recognize-images { grid-template-columns: 1fr; } }
+    .recognize-image-label {
+      font-size: .75rem; font-weight: 600; color: var(--color-muted);
+      text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px;
+    }
+    .recognize-placeholder {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      aspect-ratio: 1 / 1;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--color-muted); font-size: .875rem;
+    }
+
+    /* ── Shared ── */
+    .back-btn { margin-bottom: 20px; }
+    .loading { color: var(--color-muted); font-size: .9rem; padding: 24px 0; }
+    .error-banner {
+      background: #fef2f2; border: 1px solid #fecaca;
+      color: var(--color-danger); border-radius: var(--radius);
+      padding: 12px 16px; margin-bottom: 20px; font-size: .875rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Key<span>Vision</span> Admin</h1>
+</header>
+
+<main>
+
+  <!-- ── List view (/admin) ── -->
+  <section id="view-list">
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">Enrolled Keys</h2>
+        <p class="page-subtitle">All keys registered in the system.</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" onclick="navigate('/admin/recognize')">&#128269; Recognize</button>
+        <button class="btn btn-primary" onclick="navigate('/admin/keys/new')">+ New Key</button>
+      </div>
+    </div>
+    <div id="list-error" class="error-banner" style="display:none"></div>
+    <div id="list-body"><p class="loading">Loading&hellip;</p></div>
+  </section>
+
+  <!-- ── Key detail view (/admin/keys/:keyId) ── -->
+  <section id="view-detail" style="display:none">
+    <button class="btn btn-ghost back-btn" onclick="navigate('/admin')">&larr; Back to all keys</button>
+    <div id="detail-error" class="error-banner" style="display:none"></div>
+    <div id="detail-header" class="detail-header"></div>
+    <div id="detail-grid" class="grid-section"></div>
+
+    <!-- inline upload panel, hidden until "Add Image(s)" is clicked -->
+    <div id="add-images-panel" style="display:none;margin-top:28px">
+      <div class="form-card" style="max-width:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h3 style="font-size:1rem;font-weight:600">Add Enrollment Images</h3>
+          <button class="btn btn-ghost" onclick="hideAddImagesPanel()" type="button">Cancel</button>
+        </div>
+        <div class="form-group" style="margin-bottom:16px">
+          <label class="file-add-btn">
+            + Add Photos
+            <input type="file" id="add-images-file-input" accept="image/*" multiple
+                   style="display:none" onchange="handleAddImagesFileChange(event)" />
+          </label>
+          <div id="add-images-preview" class="preview-grid"></div>
+        </div>
+        <div id="add-images-status" class="upload-status" style="display:none"></div>
+        <button class="btn btn-primary" id="add-images-submit"
+                onclick="handleAddImagesSubmit()" disabled>Upload Images</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Image detail view (/admin/keys/:keyId/images/:imageId) ── -->
+  <section id="view-image" style="display:none">
+    <button class="btn btn-ghost back-btn" id="btn-back-detail">&larr; Back to key</button>
+    <div id="image-error" class="error-banner" style="display:none"></div>
+    <div id="image-content"></div>
+  </section>
+
+  <!-- ── Recognition results view (/admin/recognize/results/:resultId) ── -->
+  <section id="view-results" style="display:none">
+    <button class="btn btn-ghost back-btn" onclick="navigate('/admin/recognize')">&larr; New Recognition</button>
+    <div id="results-error" class="error-banner" style="display:none"></div>
+    <div id="results-content"></div>
+  </section>
+
+  <!-- ── Recognize view (/admin/recognize) ── -->
+  <section id="view-recognize" style="display:none">
+    <button class="btn btn-ghost back-btn" onclick="navigate('/admin')">&larr; Back to all keys</button>
+    <div class="page-header" style="margin-bottom:20px">
+      <div>
+        <h2 class="page-title">Recognize Key</h2>
+        <p class="page-subtitle">Upload a photo to identify a key against enrolled keys.</p>
+      </div>
+    </div>
+    <div class="form-card" id="recognize-form-card">
+      <div class="form-group" style="margin-bottom:16px">
+        <label class="form-label">Photo</label>
+        <label class="file-add-btn">
+          Choose Image
+          <input type="file" id="recognize-file-input" accept="image/*"
+                 style="display:none" onchange="handleRecognizeFileChange(event)" />
+        </label>
+        <div id="recognize-preview" style="margin-top:14px"></div>
+      </div>
+      <div id="recognize-error" class="error-banner" style="display:none"></div>
+      <button class="btn btn-primary" id="recognize-submit"
+              onclick="handleRecognizeSubmit()" disabled>Identify Key</button>
+    </div>
+    <div id="recognize-results" style="display:none;margin-top:32px"></div>
+  </section>
+
+  <!-- ── Create key view (/admin/keys/new) ── -->
+  <section id="view-create" style="display:none">
+    <button class="btn btn-ghost back-btn" onclick="navigate('/admin')">&larr; Back to all keys</button>
+    <div class="page-header" style="margin-bottom:20px">
+      <div>
+        <h2 class="page-title">New Key</h2>
+        <p class="page-subtitle">Enter details and optionally upload enrollment images.</p>
+      </div>
+    </div>
+    <div class="form-card">
+      <form id="create-form" onsubmit="handleCreateSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="create-label">
+            Label <span class="req">*</span>
+          </label>
+          <input class="form-input" id="create-label" type="text"
+                 placeholder="e.g. Front Door" required autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="create-notes">Notes</label>
+          <textarea class="form-textarea" id="create-notes"
+                    placeholder="Optional description…"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Images</label>
+          <label class="file-add-btn">
+            + Add Photos
+            <input type="file" id="file-input" accept="image/*" multiple
+                   style="display:none" onchange="handleFileChange(event)" />
+          </label>
+          <div id="preview-grid" class="preview-grid"></div>
+        </div>
+        <div id="create-status" class="upload-status" style="display:none"></div>
+        <button class="btn btn-primary" id="create-submit" type="submit">Create Key</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* ════════════════════════════════════════
+   Utilities
+   ════════════════════════════════════════ */
+function esc(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso.endsWith('Z') ? iso : iso + 'Z');
+  return d.toLocaleString(undefined, {
+    month: 'short', day: 'numeric', year: 'numeric',
+    hour: '2-digit', minute: '2-digit',
+  });
+}
+
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = '';
+}
+
+function hideError(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+/* ════════════════════════════════════════
+   Router
+   ════════════════════════════════════════ */
+const VIEWS = ['list', 'detail', 'image', 'create', 'recognize', 'results'];
+
+function setView(name) {
+  VIEWS.forEach(v =>
+    document.getElementById(`view-${v}`).style.display = v === name ? '' : 'none'
+  );
+}
+
+function navigate(path) {
+  history.pushState(null, '', path);
+  route();
+}
+
+function route() {
+  const path = location.pathname;
+
+  const imageMatch = path.match(/^\/admin\/keys\/([^/]+)\/images\/([^/]+)$/);
+  if (imageMatch) { renderImage(imageMatch[1], imageMatch[2]); return; }
+
+  if (path === '/admin/keys/new') { renderCreate(); return; }
+
+  const resultMatch = path.match(/^\/admin\/recognize\/results\/([^/]+)$/);
+  if (resultMatch) { renderResults(resultMatch[1]); return; }
+
+  if (path === '/admin/recognize') { renderRecognize(); return; }
+
+  const keyMatch = path.match(/^\/admin\/keys\/([^/]+)$/);
+  if (keyMatch) { renderDetail(keyMatch[1]); return; }
+
+  renderList();
+}
+
+window.addEventListener('popstate', route);
+
+/* ════════════════════════════════════════
+   List page  /admin
+   ════════════════════════════════════════ */
+async function renderList() {
+  setView('list');
+  hideError('list-error');
+  const body = document.getElementById('list-body');
+  body.innerHTML = '<p class="loading">Loading&hellip;</p>';
+
+  let keys;
+  try {
+    const r = await fetch('/keys');
+    if (!r.ok) throw new Error(`Server returned ${r.status}`);
+    keys = await r.json();
+  } catch (e) {
+    showError('list-error', 'Failed to load keys: ' + e.message);
+    body.innerHTML = '';
+    return;
+  }
+
+  if (keys.length === 0) {
+    body.innerHTML = `
+      <div class="table-wrap">
+        <div class="empty-state">
+          <strong>No keys enrolled yet.</strong>
+          <p>Click <em>New Key</em> above to get started.</p>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const rows = keys.map(k => `
+    <tr>
+      <td><strong>${esc(k.label)}</strong></td>
+      <td class="notes-cell">${esc(k.notes || '—')}</td>
+      <td><span class="badge">${k.image_count}</span></td>
+      <td>${fmtDate(k.created_at)}</td>
+      <td>
+        <button class="btn btn-primary"
+                onclick="navigate('/admin/keys/${esc(k.key_id)}')">View</button>
+      </td>
+    </tr>`).join('');
+
+  body.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Label</th><th>Notes</th><th>Images</th><th>Created</th><th></th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+/* ════════════════════════════════════════
+   Add images to existing key (inline panel on detail page)
+   ════════════════════════════════════════ */
+let _addImagesKeyId = null;
+let _addImagesFiles = [];
+
+function showAddImagesPanel(keyId) {
+  _addImagesKeyId = keyId;
+  _addImagesFiles = [];
+  document.getElementById('add-images-file-input').value = '';
+  document.getElementById('add-images-preview').innerHTML = '';
+  document.getElementById('add-images-status').style.display = 'none';
+  document.getElementById('add-images-submit').disabled = true;
+  document.getElementById('add-images-panel').style.display = '';
+  document.getElementById('add-images-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function hideAddImagesPanel() {
+  document.getElementById('add-images-panel').style.display = 'none';
+  _addImagesFiles = [];
+}
+
+function handleAddImagesFileChange(e) {
+  for (const f of e.target.files) {
+    if (!_addImagesFiles.some(x => x.name === f.name && x.size === f.size)) {
+      _addImagesFiles.push(f);
+    }
+  }
+  e.target.value = '';
+  renderAddImagesPreviews();
+}
+
+function removeAddImagesFile(idx) {
+  _addImagesFiles.splice(idx, 1);
+  renderAddImagesPreviews();
+}
+
+function renderAddImagesPreviews() {
+  const grid = document.getElementById('add-images-preview');
+  document.getElementById('add-images-submit').disabled = _addImagesFiles.length === 0;
+  if (_addImagesFiles.length === 0) { grid.innerHTML = ''; return; }
+  grid.innerHTML = _addImagesFiles.map((f, i) => `
+    <div class="preview-item">
+      <img src="${URL.createObjectURL(f)}" alt="${esc(f.name)}" />
+      <button class="preview-remove" onclick="removeAddImagesFile(${i})"
+              title="Remove" type="button">&times;</button>
+      <div class="preview-name">${esc(f.name)}</div>
+    </div>`).join('');
+}
+
+async function handleAddImagesSubmit() {
+  if (!_addImagesKeyId || _addImagesFiles.length === 0) return;
+
+  const submitBtn = document.getElementById('add-images-submit');
+  const statusEl  = document.getElementById('add-images-status');
+
+  submitBtn.disabled = true;
+  statusEl.style.display = '';
+  statusEl.innerHTML = '';
+
+  const results = [];
+  for (let i = 0; i < _addImagesFiles.length; i++) {
+    const file = _addImagesFiles[i];
+    statusEl.innerHTML = `<p class="loading">Uploading image ${i + 1} of ${_addImagesFiles.length}&hellip;</p>`;
+
+    try {
+      const fd = new FormData();
+      fd.append('image', file);
+      const r = await fetch(`/keys/${_addImagesKeyId}/images`, { method: 'POST', body: fd });
+      if (!r.ok) {
+        const body = await r.json().catch(() => ({}));
+        const _code = body.detail?.error_code || `HTTP ${r.status}`;
+        const _msg  = body.detail?.message;
+        results.push({ name: file.name, ok: false, reason: _msg ? `${_code}: ${_msg}` : _code });
+      } else {
+        results.push({ name: file.name, ok: true });
+      }
+    } catch (err) {
+      results.push({ name: file.name, ok: false, reason: err.message });
+    }
+  }
+
+  const succeeded = results.filter(r => r.ok).length;
+  const rows = results.map(r => `
+    <div class="upload-result ${r.ok ? 'ok' : 'fail'}">
+      <span class="icon">${r.ok ? '✓' : '✗'}</span>
+      <span class="fname">${esc(r.name)}</span>
+      ${r.reason ? `<span class="reason">— ${esc(r.reason)}</span>` : ''}
+    </div>`).join('');
+
+  statusEl.innerHTML = `
+    ${rows}
+    <p class="upload-summary">${succeeded} of ${results.length} image${results.length !== 1 ? 's' : ''} enrolled.</p>`;
+
+  if (succeeded > 0) {
+    // Refresh the image grid to show newly added images
+    setTimeout(() => {
+      hideAddImagesPanel();
+      renderDetail(_addImagesKeyId);
+    }, 1200);
+  } else {
+    submitBtn.disabled = false;
+  }
+}
+
+/* ── Inline label editing ── */
+function startLabelEdit(keyId, currentLabel) {
+  document.getElementById('key-label-display').closest('div').style.display = 'none';
+  document.getElementById('key-label-edit-form').style.display = '';
+  document.getElementById('key-label-error').style.display = 'none';
+  const input = document.getElementById('key-label-input');
+  input.value = currentLabel;
+  input.focus();
+  input.select();
+}
+
+function cancelLabelEdit() {
+  document.getElementById('key-label-edit-form').style.display = 'none';
+  document.getElementById('key-label-display').closest('div').style.display = '';
+}
+
+async function saveLabelEdit(keyId) {
+  const input    = document.getElementById('key-label-input');
+  const errorEl  = document.getElementById('key-label-error');
+  const label    = input.value.trim();
+  if (!label) {
+    errorEl.textContent = 'Label cannot be empty.';
+    errorEl.style.display = '';
+    return;
+  }
+  errorEl.style.display = 'none';
+  input.disabled = true;
+  try {
+    const r = await fetch(`/keys/${keyId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ label }),
+    });
+    if (!r.ok) {
+      const body = await r.json().catch(() => ({}));
+      throw new Error(body.detail || `Server returned ${r.status}`);
+    }
+  } catch (e) {
+    errorEl.textContent = 'Save failed: ' + e.message;
+    errorEl.style.display = '';
+    input.disabled = false;
+    return;
+  }
+  // Re-render the detail page so the header reflects the new name everywhere
+  renderDetail(keyId);
+}
+
+/* ════════════════════════════════════════
+   Key detail page  /admin/keys/:keyId
+   ════════════════════════════════════════ */
+async function renderDetail(keyId) {
+  setView('detail');
+  hideError('detail-error');
+  document.getElementById('detail-header').innerHTML = '<p class="loading">Loading&hellip;</p>';
+  document.getElementById('detail-grid').innerHTML = '';
+
+  let key, images;
+  try {
+    const [kr, ir] = await Promise.all([
+      fetch('/keys'),
+      fetch(`/keys/${keyId}/images`),
+    ]);
+    if (!kr.ok) throw new Error(`Keys list returned ${kr.status}`);
+    if (!ir.ok) throw new Error(`Images returned ${ir.status}`);
+    key = (await kr.json()).find(k => k.key_id === keyId);
+    images = await ir.json();
+  } catch (e) {
+    showError('detail-error', 'Failed to load key: ' + e.message);
+    document.getElementById('detail-header').innerHTML = '';
+    return;
+  }
+
+  if (!key) {
+    showError('detail-error', 'Key not found.');
+    document.getElementById('detail-header').innerHTML = '';
+    return;
+  }
+
+  document.getElementById('detail-header').innerHTML = `
+    <div class="detail-meta">
+      <div style="display:flex;align-items:center;gap:8px">
+        <h2 id="key-label-display">${esc(key.label)}</h2>
+        <button class="btn btn-ghost" style="padding:4px 8px;font-size:.8rem"
+                onclick="startLabelEdit('${esc(keyId)}', '${esc(key.label)}')"
+                id="key-label-edit-btn" title="Edit name">&#9998;</button>
+      </div>
+      <div id="key-label-edit-form" style="display:none;margin-top:6px">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <input class="form-input" id="key-label-input" type="text"
+                 value="${esc(key.label)}" style="max-width:280px"
+                 onkeydown="if(event.key==='Enter')saveLabelEdit('${esc(keyId)}');
+                            if(event.key==='Escape')cancelLabelEdit();" />
+          <button class="btn btn-primary" onclick="saveLabelEdit('${esc(keyId)}')">Save</button>
+          <button class="btn btn-ghost"   onclick="cancelLabelEdit()">Cancel</button>
+        </div>
+        <div id="key-label-error" class="error-banner" style="display:none;margin-top:8px"></div>
+      </div>
+      ${key.notes ? `<p class="notes">${esc(key.notes)}</p>` : ''}
+      <p class="created">Enrolled ${fmtDate(key.created_at)}</p>
+    </div>
+    <div class="detail-actions">
+      <button class="btn btn-primary"
+              onclick="showAddImagesPanel('${esc(keyId)}')">
+        + Add Image(s)
+      </button>
+      <button class="btn btn-danger"
+              onclick="confirmDelete('${esc(keyId)}', '${esc(key.label)}')">
+        Delete Key
+      </button>
+    </div>`;
+
+  const gridEl = document.getElementById('detail-grid');
+  if (images.length === 0) {
+    gridEl.innerHTML = `
+      <h3>Enrolled Images</h3>
+      <p class="no-images">No images enrolled for this key yet.</p>`;
+    return;
+  }
+
+  const cards = images.map(img => `
+    <div class="image-card"
+         onclick="navigate('/admin/keys/${esc(keyId)}/images/${esc(img.image_id)}')">
+      <img src="/keys/${keyId}/images/${img.image_id}"
+           alt="Enrolled image" loading="lazy" />
+      <div class="image-card-footer">${fmtDate(img.created_at)}</div>
+    </div>`).join('');
+
+  gridEl.innerHTML = `
+    <h3>Enrolled Images (${images.length})</h3>
+    <div class="image-grid">${cards}</div>`;
+}
+
+/* ════════════════════════════════════════
+   Image detail page  /admin/keys/:keyId/images/:imageId
+   ════════════════════════════════════════ */
+async function renderImage(keyId, imageId) {
+  setView('image');
+  hideError('image-error');
+  document.getElementById('image-content').innerHTML = '<p class="loading">Loading&hellip;</p>';
+
+  document.getElementById('btn-back-detail').onclick =
+    () => navigate(`/admin/keys/${keyId}`);
+
+  let img;
+  try {
+    const r = await fetch(`/keys/${keyId}/images`);
+    if (!r.ok) throw new Error(`Server returned ${r.status}`);
+    img = (await r.json()).find(i => i.image_id === imageId);
+    if (!img) throw new Error('Image not found');
+  } catch (e) {
+    showError('image-error', 'Failed to load image: ' + e.message);
+    document.getElementById('image-content').innerHTML = '';
+    return;
+  }
+
+  const src = `/keys/${keyId}/images/${imageId}`;
+  const contourSrc = `/keys/${keyId}/images/${imageId}/contour`;
+
+  document.getElementById('image-content').innerHTML = `
+    <div class="image-detail-layout">
+      <div class="image-panels">
+        <div class="image-panel">
+          <p class="image-panel-label">Segmented Crop</p>
+          <div class="image-detail-photo">
+            <img src="${src}" alt="Key image" />
+          </div>
+        </div>
+        <div class="image-panel" id="contour-panel">
+          <p class="image-panel-label">Contour Detection</p>
+          <div class="image-detail-photo">
+            <img src="${contourSrc}" alt="Contour overlay"
+                 onerror="document.getElementById('contour-panel').style.display='none'" />
+          </div>
+        </div>
+      </div>
+      <div class="image-detail-sidebar">
+        <div class="info-card">
+          <h3>Details</h3>
+          <div class="info-row">
+            <span class="info-label">Image ID</span>
+            <span class="info-value">${esc(imageId)}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Enrolled</span>
+            <span class="info-value">${fmtDate(img.created_at)}</span>
+          </div>
+        </div>
+        <a class="btn btn-ghost" href="${src}"
+           download="${esc(keyId)}_${esc(imageId)}.jpg">
+          &#8595; Download Image
+        </a>
+      </div>
+    </div>`;
+}
+
+/* ════════════════════════════════════════
+   Create key page  /admin/keys/new
+   ════════════════════════════════════════ */
+let _selectedFiles = [];
+
+function renderCreate() {
+  setView('create');
+  _selectedFiles = [];
+  document.getElementById('create-form').reset();
+  document.getElementById('preview-grid').innerHTML = '';
+  document.getElementById('create-status').style.display = 'none';
+  document.getElementById('create-submit').disabled = false;
+}
+
+function handleFileChange(e) {
+  for (const f of e.target.files) {
+    if (!_selectedFiles.some(x => x.name === f.name && x.size === f.size)) {
+      _selectedFiles.push(f);
+    }
+  }
+  e.target.value = '';
+  renderFilePreviews();
+}
+
+function removeFile(idx) {
+  _selectedFiles.splice(idx, 1);
+  renderFilePreviews();
+}
+
+function renderFilePreviews() {
+  const grid = document.getElementById('preview-grid');
+  if (_selectedFiles.length === 0) { grid.innerHTML = ''; return; }
+  grid.innerHTML = _selectedFiles.map((f, i) => `
+    <div class="preview-item">
+      <img src="${URL.createObjectURL(f)}" alt="${esc(f.name)}" />
+      <button class="preview-remove" onclick="removeFile(${i})"
+              title="Remove" type="button">&times;</button>
+      <div class="preview-name">${esc(f.name)}</div>
+    </div>`).join('');
+}
+
+async function handleCreateSubmit(e) {
+  e.preventDefault();
+
+  const label = document.getElementById('create-label').value.trim();
+  const notes = document.getElementById('create-notes').value.trim() || null;
+  const submitBtn = document.getElementById('create-submit');
+  const statusEl  = document.getElementById('create-status');
+
+  submitBtn.disabled = true;
+  statusEl.style.display = '';
+  statusEl.innerHTML = '<p class="loading">Creating key&hellip;</p>';
+
+  // 1. Create the key
+  let keyId;
+  try {
+    const r = await fetch('/keys', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ label, notes }),
+    });
+    if (!r.ok) throw new Error(`Server returned ${r.status}`);
+    keyId = (await r.json()).key_id;
+  } catch (err) {
+    statusEl.innerHTML =
+      `<p style="color:var(--color-danger)">Failed to create key: ${esc(err.message)}</p>`;
+    submitBtn.disabled = false;
+    return;
+  }
+
+  // 2. Upload images (sequential so errors are attributable per-file)
+  if (_selectedFiles.length === 0) {
+    navigate(`/admin/keys/${keyId}`);
+    return;
+  }
+
+  const results = [];
+  for (let i = 0; i < _selectedFiles.length; i++) {
+    const file = _selectedFiles[i];
+    statusEl.innerHTML =
+      `<p class="loading">Uploading image ${i + 1} of ${_selectedFiles.length}&hellip;</p>`;
+
+    try {
+      const fd = new FormData();
+      fd.append('image', file);
+      const r = await fetch(`/keys/${keyId}/images`, { method: 'POST', body: fd });
+      if (!r.ok) {
+        const body = await r.json().catch(() => ({}));
+        const code = body.detail?.error_code || `HTTP ${r.status}`;
+        const msg  = body.detail?.message;
+        results.push({ name: file.name, ok: false, reason: msg ? `${code}: ${msg}` : code });
+      } else {
+        results.push({ name: file.name, ok: true });
+      }
+    } catch (err) {
+      results.push({ name: file.name, ok: false, reason: err.message });
+    }
+  }
+
+  // 3. Show summary then redirect
+  const succeeded = results.filter(r => r.ok).length;
+  const rows = results.map(r => `
+    <div class="upload-result ${r.ok ? 'ok' : 'fail'}">
+      <span class="icon">${r.ok ? '✓' : '✗'}</span>
+      <span class="fname">${esc(r.name)}</span>
+      ${r.reason ? `<span class="reason">— ${esc(r.reason)}</span>` : ''}
+    </div>`).join('');
+
+  statusEl.innerHTML = `
+    ${rows}
+    <p class="upload-summary">
+      ${succeeded} of ${results.length} image${results.length !== 1 ? 's' : ''} enrolled.
+      Redirecting&hellip;
+    </p>`;
+
+  setTimeout(() => navigate(`/admin/keys/${keyId}`), 1200);
+}
+
+/* ════════════════════════════════════════
+   Recognize page  /admin/recognize
+   ════════════════════════════════════════ */
+let _recognizeFile = null;
+
+function renderRecognize() {
+  setView('recognize');
+  _recognizeFile = null;
+  document.getElementById('recognize-file-input').value = '';
+  document.getElementById('recognize-preview').innerHTML = '';
+  document.getElementById('recognize-submit').disabled = true;
+  document.getElementById('recognize-error').style.display = 'none';
+  document.getElementById('recognize-results').style.display = 'none';
+  document.getElementById('recognize-results').innerHTML = '';
+  document.getElementById('recognize-form-card').style.display = '';
+}
+
+function handleRecognizeFileChange(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  _recognizeFile = file;
+  const url = URL.createObjectURL(file);
+  document.getElementById('recognize-preview').innerHTML = `
+    <div style="max-width:200px;border:1px solid var(--color-border);
+                border-radius:var(--radius);overflow:hidden">
+      <img src="${url}" alt="${esc(file.name)}"
+           style="width:100%;display:block;object-fit:cover;aspect-ratio:1/1" />
+      <div style="padding:5px 8px;font-size:.72rem;color:var(--color-muted)">
+        ${esc(file.name)}
+      </div>
+    </div>`;
+  document.getElementById('recognize-submit').disabled = false;
+}
+
+const CONF_COLOR = {
+  high:     'var(--color-success)',
+  maybe:    '#d97706',
+  no_match: 'var(--color-danger)',
+};
+const CONF_LABEL = { high: 'High', maybe: 'Maybe', no_match: 'No Match' };
+const CONF_ICON  = { high: '✓', maybe: '~', no_match: '✗' };
+
+async function handleRecognizeSubmit() {
+  if (!_recognizeFile) return;
+
+  const submitBtn = document.getElementById('recognize-submit');
+  const errorEl   = document.getElementById('recognize-error');
+  const resultsEl = document.getElementById('recognize-results');
+
+  submitBtn.disabled = true;
+  errorEl.style.display = 'none';
+  resultsEl.innerHTML = '<p class="loading">Identifying&hellip;</p>';
+  resultsEl.style.display = '';
+
+  // POST to /recognize
+  let data;
+  try {
+    const fd = new FormData();
+    fd.append('image', _recognizeFile);
+    const r = await fetch('/recognize', { method: 'POST', body: fd });
+    if (!r.ok) {
+      const body = await r.json().catch(() => ({}));
+      throw new Error(body.detail?.message || `Server returned ${r.status}`);
+    }
+    data = await r.json();
+  } catch (e) {
+    errorEl.textContent = 'Recognition failed: ' + e.message;
+    errorEl.style.display = '';
+    resultsEl.style.display = 'none';
+    submitBtn.disabled = false;
+    return;
+  }
+
+  navigate(`/admin/recognize/results/${data.result_id}`);
+}
+
+/* ════════════════════════════════════════
+   Recognition results page
+   /admin/recognize/results/:resultId
+   ════════════════════════════════════════ */
+function simBarHtml(sim) {
+  const pct = Math.round(sim * 100);
+  const cls = sim >= 0.85 ? '' : sim >= 0.65 ? ' amber' : ' red';
+  return `
+    <span class="sim-bar-wrap">
+      <span class="sim-bar${cls}" style="width:${pct}%"></span>
+      <span class="sim-threshold" style="left:65%"  title="65% — maybe threshold"></span>
+      <span class="sim-threshold" style="left:85%"  title="85% — high threshold"></span>
+    </span>`;
+}
+
+function metricRow(label, value, pass, hint) {
+  const icon = pass
+    ? `<span style="color:var(--color-success);font-weight:700">✓</span>`
+    : `<span style="color:var(--color-danger);font-weight:700">✗</span>`;
+  return `
+    <div class="info-row">
+      <span class="info-label">${label} <span style="font-weight:400;color:var(--color-muted)">${hint}</span></span>
+      <span class="info-value" style="display:flex;align-items:center;gap:8px">
+        ${icon} ${esc(String(value))}
+      </span>
+    </div>`;
+}
+
+function renderMatchRows(allMatches) {
+  return allMatches.map((m, idx) => {
+    const c = CONF_COLOR[m.confidence] || 'var(--color-muted)';
+    const rowId = `per-image-${idx}`;
+    const perImageHtml = m.per_image.map(pi => `
+      <div class="per-image-item">
+        <img src="/keys/${m.key_id}/images/${pi.image_id}" alt="enrolled" loading="lazy" />
+        <div class="per-image-score">${(pi.similarity * 100).toFixed(1)}%</div>
+      </div>`).join('');
+
+    return `
+      <div class="match-row">
+        <span class="match-label">${esc(m.label)}</span>
+        <span class="match-score">${(m.similarity * 100).toFixed(1)}%</span>
+        ${simBarHtml(m.similarity)}
+        <span class="match-conf" style="color:${c}">${CONF_LABEL[m.confidence] || m.confidence}</span>
+        <button class="expand-btn" onclick="togglePerImage('${rowId}', this)" title="Show enrolled images">
+          &#9656; Images
+        </button>
+        <div id="${rowId}" class="per-image-grid" style="display:none">${perImageHtml}</div>
+      </div>`;
+  }).join('');
+}
+
+function togglePerImage(id, btn) {
+  const el = document.getElementById(id);
+  const open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : '';
+  btn.textContent = open ? '▶ Images' : '▼ Images';
+}
+
+async function renderResults(resultId) {
+  setView('results');
+  hideError('results-error');
+  document.getElementById('results-content').innerHTML = '<p class="loading">Loading&hellip;</p>';
+
+  let data;
+  try {
+    const r = await fetch(`/recognize/results/${resultId}`);
+    if (!r.ok) throw new Error(`Server returned ${r.status}`);
+    data = await r.json();
+  } catch (e) {
+    showError('results-error', 'Failed to load result: ' + e.message);
+    document.getElementById('results-content').innerHTML = '';
+    return;
+  }
+
+  const topConf   = data.top_confidence;
+  const confColor = CONF_COLOR[topConf] || 'var(--color-muted)';
+  const m         = data.segmentation_metrics || {};
+
+  // Zone 1 — query image triptych
+  const triptych = `
+    <div class="recognize-images" style="margin-bottom:24px">
+      <div>
+        <div class="recognize-image-label">Uploaded Photo</div>
+        <div class="image-detail-photo">
+          <img src="/recognize/results/${resultId}/query" alt="Query" style="width:100%;display:block" />
+        </div>
+      </div>
+      <div>
+        <div class="recognize-image-label">Segmented Crop (224&times;224)</div>
+        <div class="image-detail-photo">
+          <img src="/recognize/results/${resultId}/query-crop" alt="Crop" style="width:100%;display:block" />
+        </div>
+      </div>
+      <div>
+        <div class="recognize-image-label">Query Contour Overlay</div>
+        <div class="image-detail-photo">
+          <img src="/recognize/results/${resultId}/query-contour" alt="Contour" style="width:100%;display:block" />
+        </div>
+      </div>
+    </div>`;
+
+  // Zone 2 — segmentation metrics
+  const metrics = m.blur_score != null ? `
+    <div class="info-card" style="margin-bottom:24px">
+      <h3>Segmentation Quality</h3>
+      ${metricRow('Blur Score', m.blur_score, m.blur_score >= 100, '(≥ 100 = sharp)')}
+      ${metricRow('Contour Area', (m.contour_area_pct * 100).toFixed(1) + '%', m.contour_area_pct >= 0.05 && m.contour_area_pct <= 0.80, '(5%–80%)')}
+      ${metricRow('Aspect Ratio', m.aspect_ratio, m.aspect_ratio >= 2.0 && m.aspect_ratio <= 8.0, '(2.0–8.0)')}
+    </div>` : '';
+
+  // Zone 3 — confidence
+  const confBadge = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+      <h3 style="font-size:1.1rem;font-weight:700">Top Result</h3>
+      <span style="background:${confColor};color:#fff;border-radius:99px;
+                   padding:3px 14px;font-size:.82rem;font-weight:600">
+        ${CONF_LABEL[topConf] || esc(topConf)}
+      </span>
+    </div>`;
+
+  // Zone 4 — full ranked list
+  const matchList = `
+    <div class="debug-section">
+      <h3>All Enrolled Keys &mdash; Ranked by Similarity</h3>
+      <div>${renderMatchRows(data.all_matches)}</div>
+    </div>`;
+
+  // Zone 5 — "find the actual key" comparison
+  const selectOpts = data.all_matches.map((m, i) =>
+    `<option value="${i}">${esc(m.label)} &mdash; ${(m.similarity * 100).toFixed(1)}%</option>`
+  ).join('');
+
+  const compareCard = `
+    <div class="form-card" style="margin-top:28px;max-width:none">
+      <h3 style="font-size:.875rem;font-weight:600;margin-bottom:12px">
+        Not the right match? Find the actual key.
+      </h3>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <select id="compare-select" class="form-input" style="max-width:260px">${selectOpts}</select>
+        <button class="btn btn-ghost" onclick="renderComparison('${resultId}')">Compare</button>
+      </div>
+      <div id="comparison-panel" style="margin-top:16px"></div>
+    </div>`;
+
+  document.getElementById('results-content').innerHTML =
+    confBadge + triptych + metrics + matchList + compareCard;
+}
+
+function renderComparison(resultId) {
+  fetch(`/recognize/results/${resultId}`)
+    .then(r => r.json())
+    .then(data => {
+      const idx = parseInt(document.getElementById('compare-select').value, 10);
+      const m   = data.all_matches[idx];
+      const panel = document.getElementById('comparison-panel');
+
+      const queryImg = `
+        <div>
+          <div class="recognize-image-label">Your Photo (Crop)</div>
+          <div class="image-detail-photo">
+            <img src="/recognize/results/${resultId}/query-crop" alt="Query crop" style="width:100%;display:block" />
+          </div>
+        </div>`;
+
+      const enrolledImgs = m.per_image.map(pi => `
+        <div>
+          <div class="recognize-image-label">${(pi.similarity * 100).toFixed(1)}% match</div>
+          <div class="image-detail-photo">
+            <img src="/keys/${m.key_id}/images/${pi.image_id}" alt="${esc(m.label)}" style="width:100%;display:block" />
+          </div>
+        </div>`).join('');
+
+      panel.innerHTML = `
+        <p style="font-size:.875rem;color:var(--color-muted);margin-bottom:12px">
+          Comparing against <strong>${esc(m.label)}</strong>
+          (best: ${(m.similarity * 100).toFixed(1)}% &mdash;
+          <span style="color:${CONF_COLOR[m.confidence]||'inherit'};font-weight:600">
+            ${CONF_LABEL[m.confidence] || m.confidence}
+          </span>)
+        </p>
+        <div class="recognize-images">${queryImg}${enrolledImgs}</div>`;
+    })
+    .catch(e => {
+      document.getElementById('comparison-panel').innerHTML =
+        `<p style="color:var(--color-danger)">Failed: ${esc(e.message)}</p>`;
+    });
+}
+
+/* ════════════════════════════════════════
+   Delete key
+   ════════════════════════════════════════ */
+async function confirmDelete(keyId, label) {
+  if (!confirm(`Delete key "${label}" and all its images? This cannot be undone.`)) return;
+  try {
+    const r = await fetch(`/keys/${keyId}`, { method: 'DELETE' });
+    if (!r.ok) throw new Error(`Server returned ${r.status}`);
+  } catch (e) {
+    showError('detail-error', 'Delete failed: ' + e.message);
+    return;
+  }
+  navigate('/admin');
+}
+
+/* ════════════════════════════════════════
+   Init
+   ════════════════════════════════════════ */
+route();
+</script>
+</body>
+</html>

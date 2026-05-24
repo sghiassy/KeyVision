@@ -1,0 +1,25 @@
+{
+  "name": "keyvision",
+  "version": "1.0.0",
+  "description": "A Python server that identifies household keys from photos. Enroll keys by uploading images, then recognize unknown keys by pointing a camera at them.",
+  "homepage": "https://github.com/sghiassy/KeyVision#readme",
+  "bugs": {
+    "url": "https://github.com/sghiassy/KeyVision/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sghiassy/KeyVision.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "uvicorn app.main:app --reload",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Enroll Key
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8000/keys/0edae8a0-f69a-4fb3-becf-07c8aa47fc42/images
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  image: @file(/Users/sghiassy/Downloads/Photos-3-001/House Key/6.jpg)
+}
