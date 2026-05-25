@@ -114,6 +114,7 @@ xcodegen generate
 This downloads the DINOv2 weights (~330 MB) and produces `ios/KeyVision/CoreML/DINOv2.mlpackage` (~165 MB). It runs a validation step that asserts CoreML and PyTorch produce embeddings within ε = 1e-4 on 5 random images.
 
 ```bash
+# from root
 source .venv/bin/activate
 pip install coremltools  # if not already installed
 python scripts/convert_dinov2_to_coreml.py
@@ -122,15 +123,23 @@ python scripts/convert_dinov2_to_coreml.py
 Expected output:
 ```
 Loading facebook/dinov2-base from HuggingFace...
+Baking position embeddings for 224×224 inputs...
+  Interpolating position embeddings: 1369 patches → 256 patches (37×37 → 16×16)...
+  Done. New position_embeddings shape: torch.Size([1, 257, 768])
 Tracing model with torch.jit.trace...
 Converting to CoreML FLOAT16...
 Saved: ios/KeyVision/CoreML/DINOv2.mlpackage
 Validating on 5 random images...
-  Image 1: max |delta| = 0.000031
+  Image 1: cos_sim = 0.999983  max |delta| = 0.001394
   ...
-Max delta across all images: 0.000048 (threshold: 0.0001)
+Min cosine similarity : 0.999971 (threshold: >= 0.999)
+Max element-wise delta: 0.001480   (threshold: <  0.005)
 Validation PASSED.
 ```
+
+> **Why two thresholds?** FLOAT16 introduces per-element quantization noise of ~0.001–0.002, which is expected. The element-wise delta of ~0.001 sounds large but the two embeddings remain nearly parallel (cosine similarity > 0.9999), which is what actually matters for recognition. The primary validation gate is cosine similarity ≥ 0.999; the element-wise check (< 0.005) is a secondary sanity check.
+
+> **Position embedding note:** `facebook/dinov2-base` was pretrained at 518×518. Its stored position embeddings cover 1369 patches (37×37), but we feed 224×224 images (256 patches, 16×16). The script pre-computes the bicubic interpolation once in Python and bakes the result into the model as a constant before tracing — eliminating the `upsample_bicubic2d` op that coremltools does not support.
 
 The `.mlpackage` is excluded from git via `.gitignore`. Track it with Git LFS if you want to commit it:
 

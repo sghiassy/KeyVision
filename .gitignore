@@ -17,6 +17,7 @@ data
 .DS_Store
 
 ##### Xcode
+.xcodeproj
 build/
 *.pbxuser
 !default.pbxuser

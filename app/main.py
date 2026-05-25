@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from PIL import Image
 from pydantic import BaseModel
 
@@ -19,6 +20,7 @@ async def _lifespan(app):
 
 
 app = FastAPI(title="KeyVision", lifespan=_lifespan)
+app.mount("/static", StaticFiles(directory=Path(__file__).parent / "static"), name="static")
 
 
 class KeyCreate(BaseModel):
@@ -173,6 +175,11 @@ async def enroll_embedded(
         raise HTTPException(status_code=500, detail={"error_code": "save_failed", "message": str(e)})
 
     return {"image_id": image_id, "segmentation_ok": True}
+
+
+@app.get("/", include_in_schema=False)
+async def home():
+    return FileResponse(Path(__file__).parent / "home.html", media_type="text/html")
 
 
 @app.get("/admin", include_in_schema=False)

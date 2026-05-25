@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KeyVision — AI-Powered Key Recognition</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --color-primary: #2563eb;
+      --color-primary-h: #1d4ed8;
+      --color-text: #111827;
+      --color-muted: #6b7280;
+      --color-border: #e5e7eb;
+      --color-surface: #ffffff;
+      --color-bg: #f9fafb;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,.12);
+      --shadow-md: 0 4px 12px rgba(0,0,0,.10);
+      --max-w: 1100px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body { color: var(--color-text); background: var(--color-bg); }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: var(--shadow);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--color-primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border: 1.5px solid var(--color-primary);
+      border-radius: var(--radius);
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-link:hover { background: var(--color-primary); color: #fff; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+      color: #fff;
+      padding: 100px 24px 90px;
+      text-align: center;
+    }
+    .hero-inner { max-width: 720px; margin: 0 auto; }
+    .hero-eyebrow {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      opacity: 0.88;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 13px 28px;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.12s, box-shadow 0.12s;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+    .btn-white { background: #fff; color: var(--color-primary); }
+    .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.6); }
+    .btn-outline:hover { background: rgba(255,255,255,0.12); }
+
+    /* SECTION WRAPPER */
+    section { padding: 80px 24px; }
+    .section-inner { max-width: var(--max-w); margin: 0 auto; }
+    .section-label {
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--color-muted);
+      font-size: 1rem;
+      max-width: 560px;
+      margin: 0 auto 52px;
+      line-height: 1.6;
+    }
+
+    /* FEATURES GRID */
+    #features { background: var(--color-surface); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: calc(var(--radius) * 1.5);
+      padding: 28px 24px;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .feature-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .feature-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .feature-card p { font-size: 0.9rem; color: var(--color-muted); line-height: 1.6; }
+    .feature-badge {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #fef9c3;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    /* HOW IT WORKS */
+    #how { background: var(--color-bg); }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0;
+      position: relative;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 24px;
+      position: relative;
+    }
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 28px;
+      right: -1px;
+      width: 2px;
+      height: 32px;
+      background: var(--color-border);
+    }
+    @media (max-width: 640px) { .step:not(:last-child)::after { display: none; } }
+    .step-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #fff;
+      font-size: 1.4rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.35);
+    }
+    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .step p { font-size: 0.88rem; color: var(--color-muted); line-height: 1.6; }
+
+    /* CTA BANNER */
+    .cta-banner {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+      color: #fff;
+      padding: 72px 24px;
+      text-align: center;
+    }
+    .cta-banner h2 {
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .cta-banner p { font-size: 1rem; opacity: 0.85; margin-bottom: 32px; }
+
+    /* FOOTER */
+    footer {
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      padding: 24px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-muted);
+    }
+    footer a { color: var(--color-primary); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* HERO IMAGE */
+    .hero-image-wrap {
+      margin: 0 auto 40px;
+      max-width: 560px;
+      width: 100%;
+    }
+    .hero-image-wrap img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+      display: block;
+    }
+    .hero-image-placeholder {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      border: 2px dashed rgba(255,255,255,0.30);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.85rem;
+    }
+    .hero-image-placeholder .ph-icon { font-size: 2.5rem; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">KeyVision</a>
+      <a href="/admin" class="nav-link">Manage Keys &rarr;</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-image-wrap">
+        <img src="/static/hero.jpg" alt="iPhone recognizing a key using the KeyVision app">
+      </div>
+      <span class="hero-eyebrow">AI-Powered Key Recognition</span>
+      <h1>Your keys,<br>instantly recognized.</h1>
+      <p>Photograph any key, identify it in seconds — even offline. KeyVision uses on-device AI to build a visual fingerprint of every key in your collection, so you always know what's what.</p>
+      <div class="hero-actions">
+        <a href="/admin" class="btn btn-white">Get Started &rarr;</a>
+        <a href="#features" class="btn btn-outline">Learn More</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="section-inner">
+      <div class="section-label">Features</div>
+      <h2 class="section-title">Everything you need to manage your keys</h2>
+      <p class="section-sub">From a single spare to an entire property portfolio, KeyVision keeps your key collection organized and instantly searchable.</p>
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <span class="feature-icon">📱</span>
+          <h3>Inventory via Phone</h3>
+          <p>Photograph any key with your iPhone. Our AI isolates the key, checks sharpness, and creates a unique visual fingerprint in seconds — no special equipment needed.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">⚡</span>
+          <h3>Real-Time Offline Recognition</h3>
+          <p>CoreML on-device inference means recognition works without a network connection. Once your library syncs, it stays with you — even in basements, parking garages, and remote locations.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">🌐</span>
+          <h3>Web-Based Management</h3>
+          <p>Add labels, attach notes, upload multiple reference photos, and browse your full collection from any browser. No app required for the management side.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">🏢</span>
+          <h3>Multi-Property Collections</h3>
+          <p>Organize keys across locations — office, home, storage units, rentals. Label and group keys however your workflow demands.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">🔄</span>
+          <h3>Smart Sync</h3>
+          <p>One-tap sync pushes your entire key library — including AI embeddings — to the iOS app. Add a key on the web, use it offline on your phone within seconds.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">📋</span>
+          <h3>Access Audit Logs</h3>
+          <p>Every recognition event is recorded with a timestamp, confidence score, and full debug panel. Know exactly which keys were checked and why a match succeeded or failed.</p>
+          <span class="feature-badge">Coming soon</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="section-inner">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">Three steps to a smarter key collection</h2>
+      <p class="section-sub">KeyVision's pipeline is designed to be fast, robust, and fully automatic — no manual tagging or barcode scanning.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Photograph the key</h3>
+          <p>Point your phone at any key on a flat surface. The app handles cropping, orientation, and blur detection automatically.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>AI creates a fingerprint</h3>
+          <p>DINOv2 vision AI converts the image into a 768-dimensional embedding — a unique signature for that key's shape, cuts, and profile.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Recognize instantly, offline</h3>
+          <p>Hold up any key and the app tells you what it is in real time — even with no internet. Confidence scores show you exactly how certain the match is.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="cta-banner">
+    <h2>Ready to get started?</h2>
+    <p>Open the key manager and enroll your first key in under a minute.</p>
+    <a href="/admin" class="btn btn-white">Open Key Manager &rarr;</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2026 KeyVision &mdash; <a href="/admin">Key Manager</a>
+  </footer>
+
+</body>
+</html>
