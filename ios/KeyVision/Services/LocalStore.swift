@@ -10,6 +10,11 @@ final class LocalStore {
 
     private init() {
         let url = Self.dbURL
+        // Application Support directory is not created automatically on first launch.
+        try? FileManager.default.createDirectory(
+            at: url.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
         if sqlite3_open(url.path, &db) != SQLITE_OK {
             fatalError("Cannot open SQLite database at \(url.path)")
         }
@@ -116,7 +121,7 @@ final class LocalStore {
             let blob = embedding.withUnsafeBytes { Data($0) }
             sqlite3_bind_text(stmt, 1, imageId, -1, Self.transient)
             sqlite3_bind_text(stmt, 2, keyId, -1, Self.transient)
-            blob.withUnsafeBytes { ptr in
+            _ = blob.withUnsafeBytes { ptr in
                 sqlite3_bind_blob(stmt, 3, ptr.baseAddress, Int32(blob.count), Self.transient)
             }
             sqlite3_bind_text(stmt, 4, createdAt, -1, Self.transient)

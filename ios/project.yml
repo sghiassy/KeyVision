@@ -21,10 +21,10 @@ targets:
       - path: KeyVision
         excludes:
           - "CoreML/**"
-    resources:
-      - path: KeyVision/Resources/Assets.xcassets
       - path: KeyVision/CoreML/DINOv2.mlpackage
         optional: true
+    resources:
+      - path: KeyVision/Resources/Assets.xcassets
     settings:
       base:
         INFOPLIST_FILE: KeyVision/Info.plist

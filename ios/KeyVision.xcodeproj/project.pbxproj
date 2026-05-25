@@ -14,6 +14,7 @@
 		30826471347A310CCF314AB7 /* RecognitionOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED5031D5F33AEF55A23950 /* RecognitionOverlay.swift */; };
 		43B98369BB9E0A7CF06FAE6C /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085A79C3F8799D5AF2DC99C /* CameraController.swift */; };
 		4551AE0B69F41F0767609C89 /* Embedder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BDD1EEA0AE75079D035593 /* Embedder.swift */; };
+		462C27114F00F01AF73D22AA /* DINOv2.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = F6F2E5C5D15C88E0E4D2DBEF /* DINOv2.mlpackage */; };
 		46BDE67E97DA22A50D35E5EF /* Segmenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1E2723B3B520E2C447B471 /* Segmenter.swift */; };
 		5537AC7CB7A95F77820F27A3 /* RecognitionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3D6E0E7621933B0DF6F866 /* RecognitionEngine.swift */; };
 		7B92AC14A62172C0D07A83A6 /* CameraTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885D9FC245DA328C7E7FF692 /* CameraTabView.swift */; };
@@ -49,7 +50,8 @@
 		D2D16EBC648BE52339E3D35A /* KeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyModel.swift; sourceTree = "<group>"; };
 		F4A38241C14CC584AD980BDA /* EmbeddingEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddingEntry.swift; sourceTree = "<group>"; };
 		F5DD00454E4CE49B7AA54DF5 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
-		FC465A26C4E072FA706BEE4B /* KeyVision.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KeyVision.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F6F2E5C5D15C88E0E4D2DBEF /* DINOv2.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = DINOv2.mlpackage; sourceTree = "<group>"; };
+		FC465A26C4E072FA706BEE4B /* KeyVision.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeyVision.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDA7B7DB2EDDC053AC153C21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FE3D6E0E7621933B0DF6F866 /* RecognitionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionEngine.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,13 +72,6 @@
 				FDA7B7DB2EDDC053AC153C21 /* Assets.xcassets */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		22987B2EF7CF150092045B2E /* CoreML */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = CoreML;
 			sourceTree = "<group>";
 		};
 		359E5E1466CF1515B3A57ED2 /* Views */ = {
@@ -103,6 +98,7 @@
 		68DEB288FDF76F88E4B0FE91 = {
 			isa = PBXGroup;
 			children = (
+				7E8252CB55026622BD4DF655 /* CoreML */,
 				F3C809E40B5D8BC9BA17CC61 /* KeyVision */,
 				9832E7FE183FB409B6979C5F /* Products */,
 			);
@@ -115,6 +111,15 @@
 				0ECF03F51D68E38BA6C37336 /* KeysListView.swift */,
 			);
 			path = Keys;
+			sourceTree = "<group>";
+		};
+		7E8252CB55026622BD4DF655 /* CoreML */ = {
+			isa = PBXGroup;
+			children = (
+				F6F2E5C5D15C88E0E4D2DBEF /* DINOv2.mlpackage */,
+			);
+			name = CoreML;
+			path = KeyVision/CoreML;
 			sourceTree = "<group>";
 		};
 		83B9BB636762F2DFF68CBFEF /* Camera */ = {
@@ -170,7 +175,6 @@
 				C92A31EE27763C25FE63B38B /* Info.plist */,
 				83F04621E1C6E3D8FF9FC7CE /* KeyVisionApp.swift */,
 				0178B85AD55EF8B62F90F8A9 /* Camera */,
-				22987B2EF7CF150092045B2E /* CoreML */,
 				F080BBF6D94AC22F374FF3E6 /* Models */,
 				057222F43442ACEBD56CB9B9 /* Resources */,
 				9B488A8D9DB411C3D60FE4E6 /* Services */,
@@ -208,11 +212,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1500;
-				TargetAttributes = {
-					5BFB95C2CCD9A77BBF6535A3 = {
-						DevelopmentTeam = "";
-					};
-				};
 			};
 			buildConfigurationList = 3F3066BB8274F982600ECE98 /* Build configuration list for PBXProject "KeyVision" */;
 			developmentRegion = en;
@@ -254,6 +253,7 @@
 				A093E576186BD7B65A0999DB /* CameraPreviewView.swift in Sources */,
 				7B92AC14A62172C0D07A83A6 /* CameraTabView.swift in Sources */,
 				CB4A2AC9FB447E6A74B35863 /* CaptureStepView.swift in Sources */,
+				462C27114F00F01AF73D22AA /* DINOv2.mlpackage in Sources */,
 				4551AE0B69F41F0767609C89 /* Embedder.swift in Sources */,
 				8A94D09A51065E654A7CFCE7 /* EmbeddingEntry.swift in Sources */,
 				F9941239499520569115DE9D /* EnrollmentFlowView.swift in Sources */,
@@ -279,6 +279,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = D69WEANLKK;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = KeyVision/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -420,6 +421,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = D69WEANLKK;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = KeyVision/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;

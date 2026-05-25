@@ -90,14 +90,13 @@ final class Segmenter {
         if ratio < aspectMin || ratio > aspectMax { throw SegmentationError.badAspectRatio(ratio) }
 
         // Step 7: Crop with 10% padding, rotate so long axis is horizontal
-        let padX = Int(Float(bbox.width) * 0.10)
-        let padY = Int(Float(bbox.height) * 0.10)
-        let cropRect = CGRect(
-            x: max(0, bbox.origin.x - padX),
-            y: max(0, bbox.origin.y - padY),
-            width: min(W - max(0, bbox.origin.x - padX), bbox.width + 2 * padX),
-            height: min(H - max(0, bbox.origin.y - padY), bbox.height + 2 * padY)
-        )
+        let padX = CGFloat(Int(bbox.width  * 0.10))
+        let padY = CGFloat(Int(bbox.height * 0.10))
+        let cropX = max(0,       bbox.origin.x - padX)
+        let cropY = max(0,       bbox.origin.y - padY)
+        let cropW = min(CGFloat(W) - cropX, bbox.width  + 2 * padX)
+        let cropH = min(CGFloat(H) - cropY, bbox.height + 2 * padY)
+        let cropRect = CGRect(x: cropX, y: cropY, width: cropW, height: cropH)
         guard var crop = composite.cropping(to: cropRect) else { throw SegmentationError.renderFailed }
 
         // Rotate so long axis is horizontal
@@ -191,23 +190,28 @@ final class Segmenter {
         // 3×3 Laplacian kernel: [0,1,0, 1,-4,1, 0,1,0]
         var kernel: [Float] = [0, 1, 0, 1, -4, 1, 0, 1, 0]
         var lap = [Float](repeating: 0, count: size * size)
+
+        var srcBuf: vImage_Buffer!
+        var dstBuf: vImage_Buffer!
+        var kPtr: UnsafeMutablePointer<Float>!
+
         gray.withUnsafeBufferPointer { grayBuf in
-            lap.withUnsafeMutableBufferPointer { lapBuf in
-                kernel.withUnsafeMutableBufferPointer { kBuf in
-                    var srcBuf = vImage_Buffer(data: UnsafeMutableRawPointer(mutating: grayBuf.baseAddress!),
-                                              height: vImagePixelCount(size), width: vImagePixelCount(size),
-                                              rowBytes: size * MemoryLayout<Float>.size)
-                    var dstBuf = vImage_Buffer(data: lapBuf.baseAddress!,
-                                              height: vImagePixelCount(size), width: vImagePixelCount(size),
-                                              rowBytes: size * MemoryLayout<Float>.size)
-                    vImageConvolve_PlanarF(&srcBuf, &dstBuf, nil, 0, 0, kBuf.baseAddress!, 3, 3, 0, vImage_Flags(kvImageEdgeExtend))
-                }
-            }
+            srcBuf = vImage_Buffer(data: UnsafeMutableRawPointer(mutating: grayBuf.baseAddress!),
+                                   height: vImagePixelCount(size), width: vImagePixelCount(size),
+                                   rowBytes: size * MemoryLayout<Float>.size)
         }
+        lap.withUnsafeMutableBufferPointer { lapBuf in
+            dstBuf = vImage_Buffer(data: lapBuf.baseAddress!,
+                                   height: vImagePixelCount(size), width: vImagePixelCount(size),
+                                   rowBytes: size * MemoryLayout<Float>.size)
+        }
+        kernel.withUnsafeMutableBufferPointer { kBuf in
+            kPtr = kBuf.baseAddress!
+        }
+        vImageConvolve_PlanarF(&srcBuf, &dstBuf, nil, 0, 0, kPtr, 3, 3, 0, vImage_Flags(kvImageEdgeExtend))
 
         // Compute variance
         var mean: Float = 0, variance: Float = 0
-        let n = Float(lap.count)
         vDSP_meanv(lap, 1, &mean, vDSP_Length(lap.count))
         var shifted = lap.map { $0 - mean }
         vDSP_measqv(&shifted, 1, &variance, vDSP_Length(shifted.count))

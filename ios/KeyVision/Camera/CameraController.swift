@@ -5,41 +5,38 @@ import Foundation
 import UIKit
 
 /// Manages AVCaptureSession and drives the real-time recognition loop.
-@MainActor
+///
+/// NOT @MainActor — captureOutput fires on outputQueue (background thread).
+/// @Published mutations are dispatched to the main actor explicitly.
 final class CameraController: NSObject, ObservableObject {
     @Published var latestResult: MatchResult? = nil
     @Published var isAuthorized = false
 
-    private let session = AVCaptureSession()
+    let session = AVCaptureSession()
     private let videoOutput = AVCaptureVideoDataOutput()
     private let outputQueue = DispatchQueue(label: "com.keyvision.camera.output")
 
+    // Accessed only from outputQueue — no actor isolation needed.
     private var frameCount = 0
     private let frameInterval = 15  // process every 15th frame ≈ 2 fps at 30fps
-    private var recognitionTask: Task<Void, Never>? = nil
-    private var resultHideTask: Task<Void, Never>? = nil
-
-    var previewLayer: AVCaptureVideoPreviewLayer {
-        AVCaptureVideoPreviewLayer(session: session)
-    }
+    private var recognitionInFlight = false
 
     func requestAccess() async {
         let status = await AVCaptureDevice.requestAccess(for: .video)
-        isAuthorized = status
+        await MainActor.run {
+            isAuthorized = status
+        }
         if status { configureSession() }
     }
 
     func startSession() {
         guard isAuthorized else { return }
-        Task.detached(priority: .userInitiated) { [weak self] in
-            self?.session.startRunning()
-        }
+        // AVCaptureSession.startRunning() must not be called on the main thread.
+        outputQueue.async { self.session.startRunning() }
     }
 
     func stopSession() {
-        Task.detached { [weak self] in
-            self?.session.stopRunning()
-        }
+        outputQueue.async { self.session.stopRunning() }
     }
 
     private func configureSession() {
@@ -64,43 +61,54 @@ final class CameraController: NSObject, ObservableObject {
 }
 
 extension CameraController: AVCaptureVideoDataOutputSampleBufferDelegate {
-    nonisolated func captureOutput(_ output: AVCaptureOutput,
-                                    didOutput sampleBuffer: CMSampleBuffer,
-                                    from connection: AVCaptureConnection) {
+    // Called on outputQueue — no actor isolation; all CameraController properties accessed
+    // here must not be @MainActor. UI updates hop to MainActor explicitly.
+    func captureOutput(_ output: AVCaptureOutput,
+                       didOutput sampleBuffer: CMSampleBuffer,
+                       from connection: AVCaptureConnection) {
         frameCount += 1
         guard frameCount % frameInterval == 0 else { return }
+        guard !recognitionInFlight else { return }
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
-        // Ignore if a recognition is already in flight
-        guard recognitionTask == nil || recognitionTask!.isCancelled else { return }
+        recognitionInFlight = true
 
-        recognitionTask = Task.detached(priority: .userInitiated) { [weak self] in
+        Task.detached(priority: .userInitiated) { [weak self] in
             guard let self else { return }
             if #available(iOS 17.0, *) {
                 let embeddings = LocalStore.shared.allEmbeddings()
-                guard !embeddings.isEmpty else { return }
+                guard !embeddings.isEmpty else {
+                    self.recognitionInFlight = false
+                    return
+                }
                 do {
-                    let results = try await RecognitionEngine.shared.recognize(pixelBuffer: pixelBuffer, embeddings: embeddings)
+                    let results = try await RecognitionEngine.shared.recognize(
+                        pixelBuffer: pixelBuffer,
+                        embeddings: embeddings
+                    )
                     let top = results.first
+                    self.recognitionInFlight = false
+
                     await MainActor.run {
                         if top?.confidence == .high || top?.confidence == .maybe {
                             self.latestResult = top
                             self.scheduleResultHide()
                         }
-                        self.recognitionTask = nil
                     }
                 } catch {
-                    // Segmentation failures are silent during live feed
-                    await MainActor.run { self.recognitionTask = nil }
+                    // Segmentation failures during live feed are silent.
+                    self.recognitionInFlight = false
                 }
+            } else {
+                self.recognitionInFlight = false
             }
         }
     }
 
+    @MainActor
     private func scheduleResultHide() {
-        resultHideTask?.cancel()
-        resultHideTask = Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 2_000_000_000)  // 2s
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
             self.latestResult = nil
         }
     }
