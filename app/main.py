@@ -3,7 +3,8 @@ from contextlib import asynccontextmanager
 from typing import Optional
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+import numpy as np
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from PIL import Image
 from pydantic import BaseModel
@@ -122,6 +123,56 @@ async def serve_contour_image(key_id: str, image_id: str):
     if not contour_path.exists():
         raise HTTPException(status_code=404, detail="Contour overlay not available for this image")
     return FileResponse(contour_path, media_type="image/jpeg")
+
+
+@app.get("/sync")
+async def sync_all():
+    """Return all keys with embeddings for iOS full-sync."""
+    return store.get_all_keys_with_embeddings()
+
+
+@app.post("/keys/{key_id}/images/embedded")
+async def enroll_embedded(
+    key_id: str,
+    image: UploadFile = File(...),
+    embedding: UploadFile = File(...),
+    image_id: str = Form(...),
+):
+    """
+    Enroll a pre-computed embedding uploaded from the iOS app.
+    The device segments the key and runs CoreML; we store both the crop and the embedding
+    without re-running DINOv2 server-side.
+    """
+    if store.get_key(key_id) is None:
+        raise HTTPException(status_code=404, detail="Key not found")
+
+    emb_bytes = await embedding.read()
+    if len(emb_bytes) != 768 * 4:
+        raise HTTPException(
+            status_code=422,
+            detail={"error_code": "invalid_embedding", "message": f"Expected 3072 bytes, got {len(emb_bytes)}"},
+        )
+    emb = np.frombuffer(emb_bytes, dtype=np.float32).copy()
+    norm = float(np.linalg.norm(emb))
+    if not (0.99 <= norm <= 1.01):
+        raise HTTPException(
+            status_code=422,
+            detail={"error_code": "invalid_embedding", "message": f"Embedding norm {norm:.4f} not close to 1.0"},
+        )
+
+    image_bytes = await image.read()
+    img_dir = store.IMAGES_DIR / key_id
+    img_dir.mkdir(parents=True, exist_ok=True)
+    img_path = str(img_dir / f"{image_id}.jpg")
+    store.add_key_image(key_id, img_path, emb, image_id=image_id)
+    try:
+        (img_dir / f"{image_id}.jpg").write_bytes(image_bytes)
+        contour_arr = segmenter.contour_overlay(image_bytes)
+        Image.fromarray(contour_arr).save(str(img_dir / f"{image_id}_contour.jpg"))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={"error_code": "save_failed", "message": str(e)})
+
+    return {"image_id": image_id, "segmentation_ok": True}
 
 
 @app.get("/admin", include_in_schema=False)

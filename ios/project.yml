@@ -1,0 +1,43 @@
+name: KeyVision
+options:
+  bundleIdPrefix: com.keyvision
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    DEVELOPMENT_TEAM: ""  # Fill in with your Apple Developer Team ID
+    PRODUCT_BUNDLE_IDENTIFIER: com.keyvision.app
+
+targets:
+  KeyVision:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: KeyVision
+        excludes:
+          - "CoreML/**"
+    resources:
+      - path: KeyVision/Resources/Assets.xcassets
+      - path: KeyVision/CoreML/DINOv2.mlpackage
+        optional: true
+    settings:
+      base:
+        INFOPLIST_FILE: KeyVision/Info.plist
+        PRODUCT_NAME: KeyVision
+        TARGETED_DEVICE_FAMILY: "1"  # iPhone only
+        ENABLE_PREVIEWS: YES
+    info:
+      path: KeyVision/Info.plist
+      properties:
+        CFBundleDisplayName: KeyVision
+        UILaunchScreen:
+          UIColorName: ""
+        NSCameraUsageDescription: "KeyVision uses the camera to photograph and identify your keys in real time."
+        NSPhotoLibraryUsageDescription: "KeyVision can use photos from your library for key enrollment."
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false

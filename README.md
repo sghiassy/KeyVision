@@ -4,6 +4,8 @@ A Python server that identifies household keys from photos. Enroll keys by uploa
 
 Uses OpenCV for key segmentation, DINOv2 (ViT-B/14) for image embeddings, and cosine similarity for matching — no training data required.
 
+**[iOS App →](docs/ios.md)** — native iPhone app with real-time on-device recognition (no network round-trip).
+
 ---
 
 ## Installing Python 3.9

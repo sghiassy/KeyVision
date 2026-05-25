@@ -88,6 +88,12 @@ ios/Example/Pods/Natrium/bin/natrium.lock
 ### Worktrees
 .worktrees/
 
+### iOS
+# CoreML model is large (~165MB) — track via Git LFS after conversion
+ios/KeyVision/CoreML/DINOv2.mlpackage
+# Xcode derived data
+ios/DerivedData/
+
 ### Python project
 data/images/
 data/keyvision.db

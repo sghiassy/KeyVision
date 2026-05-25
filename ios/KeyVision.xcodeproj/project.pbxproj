@@ -1,0 +1,460 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0391E8B122513E41E32462FF /* KeyDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BCD310F11AC403F795F2194 /* KeyDetailView.swift */; };
+		185275081F6420EF3D62F69F /* SyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DFCEF276E090260B71A18 /* SyncService.swift */; };
+		223302C65FE60CA8342CD78B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10CE3F80BDFAFC180D2EA04 /* RootView.swift */; };
+		2F0E9E9E5FCAE31D54354647 /* KeysListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECF03F51D68E38BA6C37336 /* KeysListView.swift */; };
+		30826471347A310CCF314AB7 /* RecognitionOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED5031D5F33AEF55A23950 /* RecognitionOverlay.swift */; };
+		43B98369BB9E0A7CF06FAE6C /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9085A79C3F8799D5AF2DC99C /* CameraController.swift */; };
+		4551AE0B69F41F0767609C89 /* Embedder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BDD1EEA0AE75079D035593 /* Embedder.swift */; };
+		46BDE67E97DA22A50D35E5EF /* Segmenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1E2723B3B520E2C447B471 /* Segmenter.swift */; };
+		5537AC7CB7A95F77820F27A3 /* RecognitionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3D6E0E7621933B0DF6F866 /* RecognitionEngine.swift */; };
+		7B92AC14A62172C0D07A83A6 /* CameraTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885D9FC245DA328C7E7FF692 /* CameraTabView.swift */; };
+		8A94D09A51065E654A7CFCE7 /* EmbeddingEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A38241C14CC584AD980BDA /* EmbeddingEntry.swift */; };
+		A093E576186BD7B65A0999DB /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DD00454E4CE49B7AA54DF5 /* CameraPreviewView.swift */; };
+		A7BC9BE4F8C7B60039DA98C6 /* LocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA07F6D5BF4243C3C228C86E /* LocalStore.swift */; };
+		B1452A2FBFD41D562BCA3FB4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FDA7B7DB2EDDC053AC153C21 /* Assets.xcassets */; };
+		B430BA9F3FF89936EF4E95DB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F90AE45CBAE2C8BA1FEE05B /* SettingsView.swift */; };
+		CB4A2AC9FB447E6A74B35863 /* CaptureStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C5AD7F1F3E1C8FCB89A502 /* CaptureStepView.swift */; };
+		CCEBFF3D87B13071365F425A /* KeyVisionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F04621E1C6E3D8FF9FC7CE /* KeyVisionApp.swift */; };
+		CD69F12C8CB9EF2BB60166ED /* KeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D16EBC648BE52339E3D35A /* KeyModel.swift */; };
+		F37504EBE939C0417FA44714 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A6CA589646D27800E4C6EF /* APIService.swift */; };
+		F9941239499520569115DE9D /* EnrollmentFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9759018F7DEB3836F8EC7E30 /* EnrollmentFlowView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0ECF03F51D68E38BA6C37336 /* KeysListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysListView.swift; sourceTree = "<group>"; };
+		5BCD310F11AC403F795F2194 /* KeyDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyDetailView.swift; sourceTree = "<group>"; };
+		5FED5031D5F33AEF55A23950 /* RecognitionOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionOverlay.swift; sourceTree = "<group>"; };
+		64BDD1EEA0AE75079D035593 /* Embedder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Embedder.swift; sourceTree = "<group>"; };
+		6A1E2723B3B520E2C447B471 /* Segmenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Segmenter.swift; sourceTree = "<group>"; };
+		7F90AE45CBAE2C8BA1FEE05B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		83F04621E1C6E3D8FF9FC7CE /* KeyVisionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyVisionApp.swift; sourceTree = "<group>"; };
+		885D9FC245DA328C7E7FF692 /* CameraTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraTabView.swift; sourceTree = "<group>"; };
+		8C1DFCEF276E090260B71A18 /* SyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncService.swift; sourceTree = "<group>"; };
+		9085A79C3F8799D5AF2DC99C /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
+		9759018F7DEB3836F8EC7E30 /* EnrollmentFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrollmentFlowView.swift; sourceTree = "<group>"; };
+		A4A6CA589646D27800E4C6EF /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		BA07F6D5BF4243C3C228C86E /* LocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStore.swift; sourceTree = "<group>"; };
+		C92A31EE27763C25FE63B38B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D10CE3F80BDFAFC180D2EA04 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		D1C5AD7F1F3E1C8FCB89A502 /* CaptureStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureStepView.swift; sourceTree = "<group>"; };
+		D2D16EBC648BE52339E3D35A /* KeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyModel.swift; sourceTree = "<group>"; };
+		F4A38241C14CC584AD980BDA /* EmbeddingEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddingEntry.swift; sourceTree = "<group>"; };
+		F5DD00454E4CE49B7AA54DF5 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		FC465A26C4E072FA706BEE4B /* KeyVision.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KeyVision.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDA7B7DB2EDDC053AC153C21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FE3D6E0E7621933B0DF6F866 /* RecognitionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognitionEngine.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0178B85AD55EF8B62F90F8A9 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				9085A79C3F8799D5AF2DC99C /* CameraController.swift */,
+				F5DD00454E4CE49B7AA54DF5 /* CameraPreviewView.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		057222F43442ACEBD56CB9B9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FDA7B7DB2EDDC053AC153C21 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		22987B2EF7CF150092045B2E /* CoreML */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CoreML;
+			sourceTree = "<group>";
+		};
+		359E5E1466CF1515B3A57ED2 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D10CE3F80BDFAFC180D2EA04 /* RootView.swift */,
+				83B9BB636762F2DFF68CBFEF /* Camera */,
+				4DE00DC25E946DDC6BF35B1E /* Enrollment */,
+				7402DD0BF393187D684BC897 /* Keys */,
+				8EBF1E027FAE468C9B739516 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4DE00DC25E946DDC6BF35B1E /* Enrollment */ = {
+			isa = PBXGroup;
+			children = (
+				D1C5AD7F1F3E1C8FCB89A502 /* CaptureStepView.swift */,
+				9759018F7DEB3836F8EC7E30 /* EnrollmentFlowView.swift */,
+			);
+			path = Enrollment;
+			sourceTree = "<group>";
+		};
+		68DEB288FDF76F88E4B0FE91 = {
+			isa = PBXGroup;
+			children = (
+				F3C809E40B5D8BC9BA17CC61 /* KeyVision */,
+				9832E7FE183FB409B6979C5F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7402DD0BF393187D684BC897 /* Keys */ = {
+			isa = PBXGroup;
+			children = (
+				5BCD310F11AC403F795F2194 /* KeyDetailView.swift */,
+				0ECF03F51D68E38BA6C37336 /* KeysListView.swift */,
+			);
+			path = Keys;
+			sourceTree = "<group>";
+		};
+		83B9BB636762F2DFF68CBFEF /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				885D9FC245DA328C7E7FF692 /* CameraTabView.swift */,
+				5FED5031D5F33AEF55A23950 /* RecognitionOverlay.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		8EBF1E027FAE468C9B739516 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				7F90AE45CBAE2C8BA1FEE05B /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		9832E7FE183FB409B6979C5F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FC465A26C4E072FA706BEE4B /* KeyVision.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9B488A8D9DB411C3D60FE4E6 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A4A6CA589646D27800E4C6EF /* APIService.swift */,
+				64BDD1EEA0AE75079D035593 /* Embedder.swift */,
+				BA07F6D5BF4243C3C228C86E /* LocalStore.swift */,
+				FE3D6E0E7621933B0DF6F866 /* RecognitionEngine.swift */,
+				6A1E2723B3B520E2C447B471 /* Segmenter.swift */,
+				8C1DFCEF276E090260B71A18 /* SyncService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		F080BBF6D94AC22F374FF3E6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F4A38241C14CC584AD980BDA /* EmbeddingEntry.swift */,
+				D2D16EBC648BE52339E3D35A /* KeyModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F3C809E40B5D8BC9BA17CC61 /* KeyVision */ = {
+			isa = PBXGroup;
+			children = (
+				C92A31EE27763C25FE63B38B /* Info.plist */,
+				83F04621E1C6E3D8FF9FC7CE /* KeyVisionApp.swift */,
+				0178B85AD55EF8B62F90F8A9 /* Camera */,
+				22987B2EF7CF150092045B2E /* CoreML */,
+				F080BBF6D94AC22F374FF3E6 /* Models */,
+				057222F43442ACEBD56CB9B9 /* Resources */,
+				9B488A8D9DB411C3D60FE4E6 /* Services */,
+				359E5E1466CF1515B3A57ED2 /* Views */,
+			);
+			path = KeyVision;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5BFB95C2CCD9A77BBF6535A3 /* KeyVision */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 15B1EA09DE756D57E1424E1C /* Build configuration list for PBXNativeTarget "KeyVision" */;
+			buildPhases = (
+				3030D7D7249C4BA2CBEBE39E /* Sources */,
+				13F01B3A64EBA0447D720DA6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KeyVision;
+			packageProductDependencies = (
+			);
+			productName = KeyVision;
+			productReference = FC465A26C4E072FA706BEE4B /* KeyVision.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B17783AAC3D22A182B24FE91 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					5BFB95C2CCD9A77BBF6535A3 = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = 3F3066BB8274F982600ECE98 /* Build configuration list for PBXProject "KeyVision" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 68DEB288FDF76F88E4B0FE91;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 9832E7FE183FB409B6979C5F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5BFB95C2CCD9A77BBF6535A3 /* KeyVision */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		13F01B3A64EBA0447D720DA6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1452A2FBFD41D562BCA3FB4 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3030D7D7249C4BA2CBEBE39E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F37504EBE939C0417FA44714 /* APIService.swift in Sources */,
+				43B98369BB9E0A7CF06FAE6C /* CameraController.swift in Sources */,
+				A093E576186BD7B65A0999DB /* CameraPreviewView.swift in Sources */,
+				7B92AC14A62172C0D07A83A6 /* CameraTabView.swift in Sources */,
+				CB4A2AC9FB447E6A74B35863 /* CaptureStepView.swift in Sources */,
+				4551AE0B69F41F0767609C89 /* Embedder.swift in Sources */,
+				8A94D09A51065E654A7CFCE7 /* EmbeddingEntry.swift in Sources */,
+				F9941239499520569115DE9D /* EnrollmentFlowView.swift in Sources */,
+				0391E8B122513E41E32462FF /* KeyDetailView.swift in Sources */,
+				CD69F12C8CB9EF2BB60166ED /* KeyModel.swift in Sources */,
+				CCEBFF3D87B13071365F425A /* KeyVisionApp.swift in Sources */,
+				2F0E9E9E5FCAE31D54354647 /* KeysListView.swift in Sources */,
+				A7BC9BE4F8C7B60039DA98C6 /* LocalStore.swift in Sources */,
+				5537AC7CB7A95F77820F27A3 /* RecognitionEngine.swift in Sources */,
+				30826471347A310CCF314AB7 /* RecognitionOverlay.swift in Sources */,
+				223302C65FE60CA8342CD78B /* RootView.swift in Sources */,
+				46BDE67E97DA22A50D35E5EF /* Segmenter.swift in Sources */,
+				B430BA9F3FF89936EF4E95DB /* SettingsView.swift in Sources */,
+				185275081F6420EF3D62F69F /* SyncService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		508B508DD25A13408B50CC39 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = KeyVision/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_NAME = KeyVision;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		A35637C4E2DD2DE1B08CE1FC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.keyvision.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		F6C9E824CE0B659A50EFDEF9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.keyvision.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		FEF241E1376B9E6278DAAEC2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = KeyVision/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_NAME = KeyVision;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		15B1EA09DE756D57E1424E1C /* Build configuration list for PBXNativeTarget "KeyVision" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FEF241E1376B9E6278DAAEC2 /* Debug */,
+				508B508DD25A13408B50CC39 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		3F3066BB8274F982600ECE98 /* Build configuration list for PBXProject "KeyVision" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F6C9E824CE0B659A50EFDEF9 /* Debug */,
+				A35637C4E2DD2DE1B08CE1FC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B17783AAC3D22A182B24FE91 /* Project object */;
+}

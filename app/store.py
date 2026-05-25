@@ -1,3 +1,4 @@
+import base64
 import json
 import sqlite3
 import uuid
@@ -137,6 +138,37 @@ def get_all_embeddings() -> List[dict]:
             "embedding": np.frombuffer(r["embedding"], dtype=np.float32).copy(),
         }
         for r in rows
+    ]
+
+
+def get_all_keys_with_embeddings() -> List[Dict]:
+    """Return all keys with their images and base64-encoded embeddings for iOS sync."""
+    with _conn() as conn:
+        key_rows = conn.execute(
+            "SELECT key_id, label, notes, created_at FROM keys ORDER BY created_at"
+        ).fetchall()
+        image_rows = conn.execute(
+            "SELECT image_id, key_id, embedding, created_at FROM key_images ORDER BY created_at"
+        ).fetchall()
+
+    images_by_key: Dict[str, List[Dict]] = {}
+    for row in image_rows:
+        entry = {
+            "image_id": row["image_id"],
+            "embedding": base64.b64encode(row["embedding"]).decode("ascii"),
+            "created_at": row["created_at"],
+        }
+        images_by_key.setdefault(row["key_id"], []).append(entry)
+
+    return [
+        {
+            "key_id": row["key_id"],
+            "label": row["label"],
+            "notes": row["notes"],
+            "created_at": row["created_at"],
+            "images": images_by_key.get(row["key_id"], []),
+        }
+        for row in key_rows
     ]
 
 
