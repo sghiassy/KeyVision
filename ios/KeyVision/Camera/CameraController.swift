@@ -77,6 +77,7 @@ extension CameraController: AVCaptureVideoDataOutputSampleBufferDelegate {
             guard let self else { return }
             if #available(iOS 17.0, *) {
                 let embeddings = LocalStore.shared.allEmbeddings()
+                print("embeddings in store: \(embeddings.count)")  // ← add this
                 guard !embeddings.isEmpty else {
                     self.recognitionInFlight = false
                     return

@@ -48,10 +48,22 @@ final class Embedder {
         }
 
         var embedding = [Float](repeating: 0, count: arr.count)
-        // Access raw float32 data directly via pointer — avoids NSNumber boxing overhead
-        arr.withUnsafeBytes { ptr in
-            let floatPtr = ptr.bindMemory(to: Float.self)
-            for i in 0..<arr.count { embedding[i] = floatPtr[i] }
+        // The model runs in FLOAT16, so the buffer holds Float16 (2 bytes) not Float32 (4 bytes).
+        // Binding as Float32 would give half the element count and crash on index > count/2.
+        switch arr.dataType {
+        case .float32:
+            arr.withUnsafeBytes { ptr in
+                let src = ptr.bindMemory(to: Float.self)
+                for i in 0..<arr.count { embedding[i] = src[i] }
+            }
+        case .float16:
+            arr.withUnsafeBytes { ptr in
+                let src = ptr.bindMemory(to: Float16.self)
+                for i in 0..<arr.count { embedding[i] = Float(src[i]) }
+            }
+        default:
+            // Fallback for float64 / int32 — rare, boxing overhead acceptable for 768 elements
+            for i in 0..<arr.count { embedding[i] = arr[i].floatValue }
         }
 
         // Verify norm ≈ 1.0 (model bakes in L2 normalization)
