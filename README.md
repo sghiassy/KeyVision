@@ -143,3 +143,54 @@ pytest -m "not slow"
 # Full suite including end-to-end tests (requires ~330MB model download)
 pytest
 ```
+
+
+---
+
+## Deploying to Production
+
+The app runs on a Hostinger VPS using Docker Swarm + Caddy at `https://keyvision.cloud`.
+
+**Prerequisites:**
+- Docker Desktop running locally
+- Docker context `hostinger` configured: `docker context create hostinger --docker "host=ssh://root@72.61.65.125"`
+- Logged in to Docker Hub: `docker login`
+
+**Deploy:**
+
+```bash
+# 1. Build image for linux/amd64 (required — Mac is arm64)
+npm run docker:build:image   # ~10–20 min first time
+
+# 2. Push to Docker Hub
+npm run docker:push
+
+# 3. Deploy to VPS
+npm run docker:deploy
+
+# 4. Reload Caddy
+npm run caddy:reload
+```
+
+**Check status:**
+
+```bash
+docker context use hostinger
+docker stack services keyvision          # should show 1/1 replicas
+docker service logs -f keyvision_web     # watch for "Application startup complete"
+```
+
+The first cold start after a fresh deploy takes 30–90 seconds while DINOv2 downloads into the persistent volume. Subsequent restarts are fast.
+
+**All npm deploy scripts:**
+
+| Script                       | Description                               |
+| ---------------------------- | ----------------------------------------- |
+| `npm run docker:build:image` | Build production image for linux/amd64    |
+| `npm run docker:push`        | Push image to Docker Hub                  |
+| `npm run docker:deploy`      | Deploy stack to VPS                       |
+| `npm run caddy:reload`       | Reload Caddy after config changes         |
+| `npm run docker:local:build` | Build image for local architecture        |
+| `npm run start`              | Run Docker container locally on port 8000 |
+| `npm run docker:local:stop`  | Stop local Docker container               |
+| `npm run dev`                | Run uvicorn dev server with hot reload    |

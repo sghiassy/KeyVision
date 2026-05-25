@@ -28,7 +28,7 @@
     "docker:context:default": "docker context use default",
     "docker:context:hostinger": "docker context use hostinger",
     "docker:build:image": "npm run docker:context:default && docker build --platform linux/amd64 -t sghiassy/keyvision .",
-    "docker:push": "docker push sghiassy/keyvision:latest",
+    "docker:push": "npm run docker:context:default && docker push sghiassy/keyvision:latest",
     "docker:deploy": "npm run docker:context:hostinger && docker stack deploy -c docker-compose.yml keyvision",
     "caddy:reload": "docker context use hostinger && docker service update --force myapp_caddy"
   }
